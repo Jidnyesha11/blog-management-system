@@ -1,34 +1,21 @@
-// Backend/server.js
-
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-
-dotenv.config();
 
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const profileRoutes =
-    require("./routes/profileRoutes");
-const commentRoutes =
-    require("./routes/commentRoutes");
+const profileRoutes = require("./routes/profileRoutes");
+const commentRoutes = require("./routes/commentRoutes");
+const likeRoutes = require("./routes/likeRoutes");
 
-const likeRoutes =
-    require("./routes/likeRoutes");
-
-const {
-    notFound,
-    errorHandler
-} = require("./middleware/errorMiddleware");
+dotenv.config();
 
 const app = express();
 
 connectDB();
-
-app.disable("x-powered-by");
 
 const allowedOrigins = [
     "http://localhost:5173",
@@ -42,27 +29,19 @@ app.use(
     })
 );
 
-app.use(express.json({ limit: "1mb" }));
-app.use(
-    express.urlencoded({
-        extended: true,
-        limit: "1mb"
-    })
-);
+app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.status(200).json({
+    res.json({
         success: true,
-        message:
-            "Blog Management API is running"
+        message: "Blog Management API is running"
     });
 });
 
 app.get("/api/health", (req, res) => {
-    res.status(200).json({
+    res.json({
         success: true,
-        message: "API is healthy",
-        timestamp: new Date().toISOString()
+        message: "API is healthy"
     });
 });
 
@@ -96,18 +75,15 @@ app.use(
     likeRoutes
 );
 
-app.use(notFound);
-
-app.use(errorHandler);
-
 const PORT =
     process.env.PORT || 5000;
 
 app.listen(
     PORT,
+    "0.0.0.0",
     () => {
         console.log(
-            `Server running on http://localhost:${PORT}`
+            `Server running on port ${PORT}`
         );
     }
 );
