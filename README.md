@@ -323,67 +323,132 @@ JWT tokens are used for authentication and role-based authorization.
 
 ---
 
-# Environment Variables
+## Local Development
 
-Never commit your real `.env` file.
+Backend
 
-Use:
-
-```text
-.env.example
-```
-
-as the template.
-
-Required backend variables:
-
-```env
-PORT=
-MONGODB_URI=
-JWT_SECRET=
-```
-
-Required frontend variable:
-
-```env
-VITE_API_URL=
-```
-
----
-
-# Development
-
-Backend:
-
-```bash
 cd Backend
+npm install
 npm run dev
-```
 
-Frontend:
+Backend runs on:
 
-```bash
+http://localhost:5000
+Frontend
+
+Open another terminal:
+
 cd Frontend
+npm install
 npm run dev
-```
 
----
+Frontend runs on:
 
-# Production Build
+http://localhost:5173
+Environment Variables
+Backend
 
-Frontend:
+## Create:
 
-```bash
-cd Frontend
-npm run build
-```
+Backend/.env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+FRONTEND_URL=http://localhost:5173
+Frontend
 
-The production files are generated in:
+## Create:
 
-```text
-Frontend/dist
-```
+Frontend/.env
+VITE_API_URL=http://localhost:5000/api
+Production
 
+The application is deployed using Render.
+
+Frontend
+https://blog-management-frontend-kaly.onrender.com
+
+
+        ↓
+
+
+Backend API
+https://blog-management-system-5jhi.onrender.com
+
+
+        ↓
+
+
+MongoDB Atlas
+Production API
+
+The backend API base URL is:
+
+https://blog-management-system-5jhi.onrender.com/api
+
+Health check:
+
+https://blog-management-system-5jhi.onrender.com/api/health
+Authentication
+
+The application uses JWT-based authentication.
+
+Authenticated requests use:
+
+Authorization: Bearer <JWT_TOKEN>
+
+## Roles:
+
+user
+admin
+
+Admin-only functionality is protected using role-based authorization middleware.
+
+## Main API Routes
+POST   /api/auth/register
+POST   /api/auth/login
+
+
+GET    /api/posts
+GET    /api/posts/:id
+POST   /api/posts
+PUT    /api/posts/:id
+DELETE /api/posts/:id
+
+
+GET    /api/profile
+PUT    /api/profile
+PUT    /api/profile/password
+
+
+GET    /api/comments/post/:postId
+POST   /api/comments/post/:postId
+DELETE /api/comments/:id
+
+
+POST   /api/likes/:postId
+GET    /api/likes/:postId
+
+
+Admin:
+GET    /api/admin/users
+PUT    /api/admin/users/:id/role
+DELETE /api/admin/users/:id
+Deployment
+
+The project is deployed as two Render services:
+
+Backend
+Service Type: Web Service
+Root Directory: Backend
+Build Command: npm install
+Start Command: npm start
+
+Frontend
+Service Type: Static Site
+Root Directory: Frontend
+Build Command: npm install && npm run build
+Publish Directory: dist
 ---
 
 # Security
